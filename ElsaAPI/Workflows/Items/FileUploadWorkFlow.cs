@@ -1,5 +1,7 @@
-﻿using Elsa.Activities.Http;
+﻿using Elsa.Activities.ControlFlow;
+using Elsa.Activities.Http;
 using Elsa.Builders;
+using Fluid.Ast;
 using System.Net;
 
 namespace ElsaAPI.Workflows.Items
@@ -9,10 +11,10 @@ namespace ElsaAPI.Workflows.Items
         public void Build(IWorkflowBuilder builder)
         {
             builder
-                 .WithDisplayName("file-upload")
-                .HttpEndpoint("/v1/approval")
-                .WriteHttpResponse(HttpStatusCode.OK, "<h1>File Upload!</h1>", "application/json")
-                .HttpEndpoint("/v1/helloworld");
+                .HttpEndpoint(activity => activity
+                    .WithPath("/v1/helloworld")
+                    .WithMethod(HttpMethod.Get.Method)
+                    .WithReadContent());
         }
     }
 }

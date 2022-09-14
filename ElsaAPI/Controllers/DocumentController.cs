@@ -1,4 +1,5 @@
 ﻿using Elsa.Infrastructure.DocumentService;
+using ElsaAPI.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using static System.Net.WebRequestMethods;
@@ -10,10 +11,12 @@ namespace ElsaAPI.Controllers
     public class DocumentController : ControllerBase
     {
         private readonly ModifyDocument _modifyDocument;
+        private readonly UserService _userService;
 
-        public DocumentController(ModifyDocument modifyDocument)
+        public DocumentController(ModifyDocument modifyDocument, UserService userService)
         {
             _modifyDocument = modifyDocument;
+            _userService = userService;
         }
 
         [HttpGet("helloworld")]
@@ -35,10 +38,22 @@ namespace ElsaAPI.Controllers
             return Ok();
         }
 
-        [HttpPost("file-create")]
-        public async Task<IActionResult> CreateFile()
+        [HttpGet("file-create")]
+        public IActionResult CreateFile()
         {
-            await _modifyDocument.CreateFileAsync();
+            _modifyDocument.CreateFileAsync();
+            return Ok();
+        }
+
+        [HttpPost("newuser")]
+        public IActionResult AddUser()
+        {
+            var newUser = new User
+            {
+                Id = 1,
+                Name = "sad"
+            };
+            _userService.CreateUser(newUser);
             return Ok();
         }
     }

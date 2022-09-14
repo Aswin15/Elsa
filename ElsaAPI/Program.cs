@@ -1,10 +1,7 @@
-using Elsa.Activities.Http.Options;
 using Elsa.Infrastructure.DocumentService;
 using ElsaAPI;
+using ElsaAPI.Context;
 using ElsaAPI.Extensions;
-using ElsaAPI.Workflows.Items;
-using Microsoft.AspNetCore.Builder.Extensions;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +14,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<ElsaAPIDbContext>();
+builder.Services.AddTransient<UserService>();
 // set path for file download
 builder.Services.AddSingleton<IFileProvider>(
             new PhysicalFileProvider(
@@ -27,8 +26,8 @@ builder.Services.AddTransient<ModifyDocument>();
 builder.Services
                 .AddElsa(options => options
                     .AddHttpActivities()
-                    //.AddWorkflow<HelloWorldWorkFlow>()
-                    .AddWorkflow<FileUploadWorkFlow>());
+                    .AddActivitiesFrom<Program>()
+                    .AddWorkflowsFrom<Program>());
 builder.Services.AddElsaApiEndpoints();
 
 

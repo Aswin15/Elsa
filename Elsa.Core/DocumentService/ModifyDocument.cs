@@ -24,7 +24,7 @@ namespace Elsa.Infrastructure.DocumentService
             }
         }
 
-        public async Task CreateFileAsync()
+        public void CreateFileAsync()
         {
             // Create a string array with the lines of text
             string[] lines = { "First line", "Second line", "Third line" };
