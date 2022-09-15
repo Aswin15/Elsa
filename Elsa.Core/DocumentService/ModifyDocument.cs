@@ -24,7 +24,7 @@ namespace Elsa.Infrastructure.DocumentService
             }
         }
 
-        public void CreateFileAsync()
+        public void CreateFileAsync(string filename = null)
         {
             // Create a string array with the lines of text
             string[] lines = { "First line", "Second line", "Third line" };
@@ -32,14 +32,12 @@ namespace Elsa.Infrastructure.DocumentService
             // Set a variable to the Documents path.
             string docPath = Path.Combine(
                         Directory.GetCurrentDirectory(), "uploadedDocs",
-                        "New_File");
+                        filename ?? "New_File");
 
             // Write the string array to a new file named "WriteLines.txt".
-            using (StreamWriter outputFile = new(docPath))
-            {
-                foreach (string line in lines)
-                    outputFile.WriteLine(line);
-            }
+            using StreamWriter outputFile = new(docPath);
+            foreach (string line in lines)
+                outputFile.WriteLine(line);
         }
     }
 }

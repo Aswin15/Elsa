@@ -32,16 +32,16 @@ namespace ElsaAPI.Controllers
             return Ok();
         }
 
-        [HttpGet("approval")]
-        public IActionResult UserApproval()
+        [HttpPost("approval")]
+        public IActionResult UserApproval(User user)
         {
             return Ok();
         }
 
-        [HttpGet("file-create")]
-        public IActionResult CreateFile()
+        [HttpPost("file-create")]
+        public IActionResult CreateFile(User user)
         {
-            _modifyDocument.CreateFileAsync();
+            _modifyDocument.CreateFileAsync(user.Name);
             return Ok();
         }
 

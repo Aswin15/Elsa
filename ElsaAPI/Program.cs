@@ -23,12 +23,9 @@ builder.Services.AddSingleton<IFileProvider>(
 builder.Services.AddTransient<ModifyDocument>();
 
 
-builder.Services
-                .AddElsa(options => options
-                    .AddHttpActivities()
-                    .AddActivitiesFrom<Program>()
-                    .AddWorkflowsFrom<Program>());
-builder.Services.AddElsaApiEndpoints();
+// elsa
+builder.Services.AddElsa();
+builder.Services.AddLiquidHandlers();
 
 
 

@@ -1,5 +1,8 @@
-﻿using Elsa.Persistence.EntityFramework.Core.Extensions;
+﻿using Elsa;
+using Elsa.Persistence.EntityFramework.Core.Extensions;
 using Elsa.Providers.Workflows;
+using Elsa.Scripting.Liquid.Messages;
+using ElsaAPI.Workflows.Handlers;
 using ElsaAPI.Workflows.Items;
 using Microsoft.EntityFrameworkCore;
 using Storage.Net;
@@ -11,6 +14,24 @@ namespace ElsaAPI.Extensions
         public static IServiceCollection AddWorkflowServices(this IServiceCollection services, Action<DbContextOptionsBuilder> configureDb, IConfiguration configuration)
         {
             return services.AddElsa(configureDb, configuration);
+        }
+
+        public static IServiceCollection AddLiquidHandlers(this IServiceCollection services)
+        {
+            services.AddNotificationHandler<EvaluatingLiquidExpression, LiquidConfigurationHandler>();
+            return services;
+        }
+
+        public static IServiceCollection AddElsa(this IServiceCollection services)
+        {
+            services
+                .AddElsa(options => options
+                    .AddHttpActivities()
+                    .AddActivitiesFrom<Program>()
+                    //.AddWorkflowsFrom<Program>()
+                    );
+            services.AddElsaApiEndpoints();
+            return services;
         }
 
         private static IServiceCollection AddElsa(this IServiceCollection services, Action<DbContextOptionsBuilder> configureDb, IConfiguration configuration)
@@ -26,7 +47,6 @@ namespace ElsaAPI.Extensions
 
                     // Configure HTTP activities.
                     .AddHttpActivities(configuration.GetSection("Elsa:Server").Bind)
-                    .AddWorkflow<HelloWorldWorkFlow>()
                 );
 
             // Get directory path to current assembly.
